@@ -23,6 +23,7 @@ function App() {
         { path: "categories", element: <CategoriesList /> },
       ],
     },
+
     {
       path: "/",
       element: <AuthLayout />,
