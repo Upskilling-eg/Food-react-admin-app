@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 import Navbar from '../Navbar/Navbar'
 import Header from '../Header/Header'
 
-export default function MasterLayout() {
+export default function MasterLayout({adminData}) {
   return (
     <>
        <div className="container-fluid">
@@ -16,7 +16,7 @@ export default function MasterLayout() {
             </div>
             <div className="col-md-10">
                 <div>
-                    <Navbar/>
+                    <Navbar adminData={adminData}/>
                     <Header/>
                     <Outlet/>
                 </div>

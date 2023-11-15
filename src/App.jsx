@@ -9,12 +9,32 @@ import AuthLayout from "./SharedModule/Components/AuthLayout/AuthLayout";
 import MasterLayout from "./SharedModule/Components/MasterLayout/MasterLayout";
 import NotFound from "./SharedModule/Components/NotFound/NotFound";
 import UsersList from "./UsersModule/Components/UsersList/UsersList";
+import { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+import ProtectedRoute from "./SharedModule/Components/ProtectedRoute/ProtectedRoute";
 
 function App() {
+  const [adminData, setAdminData] = useState(null);
+
+  let saveAdminData = () => {
+    let encodedToken = localStorage.getItem("adminToken");
+    let decodedToken = jwtDecode(encodedToken);
+    setAdminData(decodedToken);
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("adminToken")) {
+      saveAdminData();
+    }
+  }, []);
   const routes = createBrowserRouter([
     {
       path: "dashboard",
-      element: <MasterLayout />,
+      element: (
+        <ProtectedRoute adminData={adminData}>
+          <MasterLayout adminData={adminData} />
+        </ProtectedRoute>
+      ),
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Home /> },
@@ -29,8 +49,8 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Login /> },
-        { path: "login", element: <Login /> },
+        { index: true, element: <Login saveAdminData={saveAdminData} /> },
+        { path: "login", element: <Login saveAdminData={saveAdminData} /> },
         { path: "forget-pass", element: <ForgetPass /> },
       ],
     },
