@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import logo from "../../../assets/images/logo.png";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-export default function Login({ saveAdminData }) {
+export default function ResetPassRequest() {
   const navigate = useNavigate();
   const {
     register,
@@ -13,22 +13,14 @@ export default function Login({ saveAdminData }) {
     formState: { errors },
   } = useForm();
 
-  useEffect(() => {
-    if (localStorage.getItem("adminToken")) {
-      navigate("/dashboard");
-    }
-  }, []);
-
   const onSubmit = (data) => {
     axios
-      .post("http://upskilling-egypt.com:3002/api/v1/Users/Login", data)
+      .post("http://upskilling-egypt.com:3002/api/v1/Users/Reset/Request", data)
       .then((response) => {
-        localStorage.setItem("adminToken", response.data.token);
-        saveAdminData();
-        navigate("/dashboard");
+        navigate("/reset-pass");
 
-        setTimeout(() => {         
-          toast.success("login successsfully", {
+        setTimeout(() => {
+          toast.success("Mail sent successsfully", {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
@@ -43,7 +35,7 @@ export default function Login({ saveAdminData }) {
       .catch((error) => {
         toast.error(error.response.data.message, {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -64,9 +56,9 @@ export default function Login({ saveAdminData }) {
               <img src={logo} className="w-50" alt="logo" />
             </div>
             <form className="w-75 m-auto" onSubmit={handleSubmit(onSubmit)}>
-              <h4 className="fw-bolder">Log In</h4>
+              <h4 className="fw-bolder fs-6">Request Reset Password</h4>
               <span className="text-muted">
-                Welcome Back! Please enter your details
+                Please Enter Your Email And Check Your Inbox
               </span>
               <div className="form-group my-3 position-relative">
                 <i className="fa fa-envelope-open position-absolute"></i>
@@ -87,30 +79,8 @@ export default function Login({ saveAdminData }) {
                 )}
               </div>
 
-              <div className="form-group my-3 position-relative">
-                <i className="fa fa-key position-absolute"></i>
-
-                <input
-                  placeholder="Password"
-                  className="form-control ps-4 mb-1"
-                  type="password"
-                  {...register("password", {
-                    required: true,
-                  })}
-                />
-                {errors.password && errors.password.type === "required" && (
-                  <span className="text-danger">password is required</span>
-                )}
-              </div>
-
-              <div className="form-group my-3 position-relative d-flex justify-content-end">
-                <Link to="/reset-pass-request" className="text-success">
-                  Forgot Password?
-                </Link>
-              </div>
-
               <div className="form-group my-3">
-                <button className="btn w-100">Login</button>
+                <button className="btn w-100">Send</button>
               </div>
             </form>
           </div>

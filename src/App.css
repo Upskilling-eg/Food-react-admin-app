@@ -2,7 +2,7 @@ body{
     color: #494949 !important;
     font-size: 12px !important;
 } 
-button
+form button
 {
     background-color: #4AA35A !important;
     color: #fff !important;
@@ -26,6 +26,7 @@ button
     left: 15px;
     bottom: -7px;
 }
+
 .Auth-container{
     /* background-color: #0f0; */
     background-image: url(assets/images/auth-bg.png);
@@ -34,5 +35,5 @@ button
 }
 
 .bg-overlay{
-    background:linear-gradient(to left,rgba(0,0,0,0.6),rgba(47,140,51,0.6))
+    background:linear-gradient(  to bottom left,rgba(0,0,0,0.7),rgba(47,140,51,0.5))
 }

@@ -1,10 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import logo from "../../../assets/images/1.png";
+import logo from "../../../assets/images/logo.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
-export default function ForgetPass() {
+export default function ChangePass({ handleClose }) {
   const navigate = useNavigate();
 
   const {
@@ -26,30 +27,51 @@ export default function ForgetPass() {
         }
       )
       .then((response) => {
-        console.log(response);
-        navigate("/login");
+        handleClose();
+        toast.success("password changed successsfully", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       })
       .catch((error) => {
-        toast(error.response.data.message);
+        toast.error(error.response.data.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       });
   };
 
   return (
-    <div className="Auth-container container-fluid">
-      <div className="row bg-overlay vh-100 justify-content-center align-items-center">
-        <div className="col-md-6">
-          <div className="bg-white p-2">
+    <div className="container-fluid">
+      <ToastContainer />
+
+      <div className="row justify-content-center align-items-center">
+        <div className="col-sm-12">
+          <div className="bg-white py-4 rounded-2">
             <div className="logo-cont text-center">
-              <img src={logo} className="w-25" alt="logo" />
+              <img src={logo} className="w-50" alt="logo" />
             </div>
             <form className="w-75 m-auto" onSubmit={handleSubmit(onSubmit)}>
-              <h2>Change Your Password</h2>
-              <p>Enter your details below</p>
+              <h4 className="fw-bolder fs-6">Change Your Password</h4>
+              <span className="text-muted">Enter your details below</span>
+              <div className="form-group my-3 position-relative">
+                <i className="fa fa-key position-absolute"></i>
 
-              <div className="form-group my-3">
                 <input
                   placeholder="Old Password"
-                  className="form-control"
+                  className="form-control ps-4 mb-1"
                   type="password"
                   {...register("oldPassword", {
                     required: true,
@@ -60,10 +82,12 @@ export default function ForgetPass() {
                     <span className="text-danger">oldPassword is required</span>
                   )}
               </div>
-              <div className="form-group my-3">
+              <div className="form-group my-3 position-relative">
+                <i className="fa fa-key position-absolute"></i>
+
                 <input
                   placeholder="New Password"
-                  className="form-control"
+                  className="form-control ps-4 mb-1"
                   type="password"
                   {...register("newPassword", {
                     required: true,
@@ -74,10 +98,12 @@ export default function ForgetPass() {
                     <span className="text-danger">newPassword is required</span>
                   )}
               </div>
-              <div className="form-group my-3">
+              <div className="form-group my-3 position-relative">
+                <i className="fa fa-key position-absolute"></i>
+
                 <input
                   placeholder="Confirm New Password"
-                  className="form-control"
+                  className="form-control ps-4 mb-1"
                   type="password"
                   {...register("confirmNewPassword", {
                     required: true,
@@ -90,10 +116,9 @@ export default function ForgetPass() {
                     </span>
                   )}
               </div>
+
               <div className="form-group my-3">
-                <button className="btn btn-success w-100">
-                  Change Password
-                </button>
+                <button className="btn  w-100">Change Password</button>
               </div>
             </form>
           </div>
