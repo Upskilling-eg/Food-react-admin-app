@@ -1,7 +1,16 @@
 body{
     color: #494949 !important;
-    font-size: 12px !important;
+    font-size: 14px !important;
+    overflow: hidden;
 } 
+
+.header-content {
+    background-image: url(../src/assets/images/header-bg-svg.svg);
+    background-size: cover;
+    background-position: center center;
+}
+
+
 form button
 {
     background-color: #4AA35A !important;
@@ -36,4 +45,33 @@ form button
 
 .bg-overlay{
     background:linear-gradient(  to bottom left,rgba(0,0,0,0.7),rgba(47,140,51,0.5))
+}
+
+.sidebar-container .ps-sidebar-container{
+   background-color: #1F263E;
+   height: 100vh;
+   color: #fff;
+   border-top-right-radius: 50px;
+}
+
+.sidebar-container .ps-sidebar-root
+{
+    border: none;
+}
+
+.sidebar-container .ps-sidebar-container .ps-menu-button:hover{
+    background-color: rgba(0, 146, 71, 0.5)
+}
+.sidebar-container .ps-sidebar-container .logo-toggle{
+    margin: 20px 0;
+}
+.sidebar-container .ps-sidebar-container .logo-toggle a:hover{
+    background-color: transparent
+
+}
+.sidebar-container .ps-sidebar-container .logo-toggle span{
+    width: fit-content;
+}
+.logo-toggle img{
+    width: 150px;
 }
