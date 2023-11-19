@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import logo from "../../../assets/images/logo.png";
-import { useForm } from "react-hook-form";
 import axios from "axios";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import logo from "../../../assets/images/logo.png";
 
 export default function Login({ saveAdminData }) {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function Login({ saveAdminData }) {
         saveAdminData();
         navigate("/dashboard");
 
-        setTimeout(() => {         
+        setTimeout(() => {
           toast.success("login successsfully", {
             position: "top-right",
             autoClose: 3000,

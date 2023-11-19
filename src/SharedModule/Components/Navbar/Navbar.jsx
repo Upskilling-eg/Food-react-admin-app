@@ -2,7 +2,6 @@ import React from "react";
 import avatar from "../../../assets/images/avatar.png";
 
 export default function Navbar({ adminData }) {
-  console.log(adminData);
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-light mt-5">

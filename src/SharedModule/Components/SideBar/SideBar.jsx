@@ -50,13 +50,13 @@ export default function SideBar() {
             Users
           </MenuItem>
           <MenuItem
-            icon={<i class="fas fa-pizza-slice"></i>}
+            icon={<i className="fas fa-pizza-slice"></i>}
             component={<Link to="/dashboard/recipes" />}
           >
             Recipes
           </MenuItem>
           <MenuItem
-            icon={<i class="fa-solid fa-burger"></i>}
+            icon={<i className="fa-solid fa-burger"></i>}
             component={<Link to="/dashboard/categories" />}
           >
             Categories
@@ -68,7 +68,7 @@ export default function SideBar() {
             Change Password
           </MenuItem>
           <MenuItem
-            icon={<i class="fa-solid fa-right-from-bracket"></i>}
+            icon={<i className="fa-solid fa-right-from-bracket"></i>}
             onClick={logOut}
           >
             Logout

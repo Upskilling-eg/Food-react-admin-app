@@ -1,16 +1,16 @@
 body{
     color: #494949 !important;
     font-size: 14px !important;
-    overflow: hidden;
 } 
-
-.header-content {
+.header-content{
     background-image: url(../src/assets/images/header-bg-svg.svg);
     background-size: cover;
-    background-position: center center;
+    background-position: 100% 100%;
 }
 
-
+.section-container{
+background-color: #F0FFEF;
+}
 form button
 {
     background-color: #4AA35A !important;
