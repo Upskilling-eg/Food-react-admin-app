@@ -19,8 +19,6 @@ export default function MasterLayout({ adminData }) {
           <div>
             <Navbar adminData={adminData} />
 
-            <Header pathName={location.pathname} adminData={adminData}/>
-
             <Outlet />
           </div>
         </div>
