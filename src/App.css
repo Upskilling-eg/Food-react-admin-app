@@ -7,7 +7,9 @@ body{
     background-size: cover;
     background-position: 100% 100%;
 }
-
+.img-container{
+    width: 50px;
+}
 .section-container{
 background-color: #F0FFEF;
 }
