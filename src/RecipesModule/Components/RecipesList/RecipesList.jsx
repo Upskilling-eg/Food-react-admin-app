@@ -5,16 +5,75 @@ import axios from "axios";
 import noData from "../../../assets/images/no-data.png";
 import Modal from "react-bootstrap/Modal";
 import { toast, ToastContainer } from "react-toastify";
+import { useForm } from "react-hook-form";
 
 export default function RecipesList() {
   const [RecipesList, setRecipesList] = useState([]);
+  const [tagsList, setTagsList] = useState([]);
+  const [categorisList, setCategoriesList] = useState([]);
+
   const [modalState, setModalState] = useState("close");
   const [itemId, setItemId] = useState(0);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const addRecipe = (data) => {
+    const formData = new FormData();
+    formData.append("recipeImage", data["recipeImage"][0]);
+    formData.append("name", JSON.stringify(data["name"]));
+    formData.append("description", JSON.stringify(data["description"]));
+    formData.append("price", data["price"]);
+    formData.append("tagId", data["tagId"]);
+    formData.append("categoriesIds", data["categoriesIds"]);
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+    // for (const key in data) {
+    //   if (key === "recipeImage") {
+    //     formData.append(key, data[key][0]);
+    //   } else {
+    //     formData.append(key, data[key]);
+    //   }
+    // }
+    data.recipeImage = data.recipeImage[0];
+    axios
+      .post("http://upskilling-egypt.com:3002/api/v1/Recipe", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+      })
+      .then((response) => {
+        toast.success("added successsfully", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        handleClose();
+        getAllRecipes();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const handleClose = () => setModalState("close");
 
   const showDeleteModal = (id) => {
     setItemId(id);
     setModalState("delete-modal");
+  };
+
+  const showAddModal = () => {
+    setModalState("add-modal");
+    getAllTags();
+    getAllCategories();
   };
 
   const deleteRecipe = () => {
@@ -60,6 +119,39 @@ export default function RecipesList() {
       });
   };
 
+  const getAllTags = () => {
+    axios
+      .get("http://upskilling-egypt.com:3002/api/v1/tag/", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data);
+        setTagsList(response?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const getAllCategories = () => {
+    axios
+      .get(
+        "http://upskilling-egypt.com:3002/api/v1/Category/?pageSize=20&pageNumber=1",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response?.data?.data);
+        setCategoriesList(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
     getAllRecipes();
   }, []);
@@ -83,6 +175,107 @@ export default function RecipesList() {
           </div>
         </Modal.Body>
       </Modal>
+      <Modal show={modalState === "add-modal"} onHide={handleClose}>
+        <Modal.Body>
+          <div className="text-center">
+            <h4>Add new recipe</h4>
+            <form onSubmit={handleSubmit(addRecipe)}>
+              <div className="form-group my-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="please enter recipe name"
+                  {...register("name", { required: true })}
+                />
+                {errors.name && errors.name.type === "required" && (
+                  <span className="text-danger my-2">field is required</span>
+                )}
+              </div>
+              <div className="form-group my-3">
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="please enter recipe price"
+                  {...register("price", {
+                    required: true,
+                  })}
+                />
+                {errors.price && errors.price.type === "required" && (
+                  <span className="text-danger my-2">field is required</span>
+                )}
+              </div>
+              <div className="form-group my-3">
+                <textarea
+                  className="form-control"
+                  placeholder="please enter recipe description"
+                  {...register("description", { required: true })}
+                ></textarea>
+                {errors.description &&
+                  errors.description.type === "required" && (
+                    <span className="text-danger my-2">field is required</span>
+                  )}
+              </div>
+              <div className="form-group my-3">
+                <select
+                  className="form-select"
+                  {...register("tagId", {
+                    required: true,
+                    valueAsNumber: true,
+                  })}
+                >
+                  <option className="text-muted" value="">
+                    enter tag id
+                  </option>
+                  {tagsList?.map((tag) => (
+                    <option key={tag.id} value={tag.id}>
+                      {tag.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.tagId && errors.tagId.type === "required" && (
+                  <span className="text-danger my-2">field is required</span>
+                )}
+              </div>
+              <div className="form-group my-3">
+                <select
+                  className="form-select"
+                  {...register("categoriesIds", {
+                    required: true,
+                  })}
+                >
+                  <option className="text-muted" value="">
+                    enter category id
+                  </option>
+
+                  {categorisList?.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.categoriesIds &&
+                  errors.categoriesIds.type === "required" && (
+                    <span className="text-danger my-2">field is required</span>
+                  )}
+              </div>
+
+              <div className="form-group my-3">
+                <input
+                  {...register("recipeImage")}
+                  className="form-control form-control-lg"
+                  id="formFileLg"
+                  type="file"
+                  accept="image/*"
+                />
+              </div>
+
+              <div className="form-group">
+                <button className="btn btn-success w-100">Add Recipe</button>
+              </div>
+            </form>
+          </div>
+        </Modal.Body>
+      </Modal>
       <Header
         title={"Recipes Items"}
         paragraph={
@@ -99,7 +292,9 @@ export default function RecipesList() {
         </div>
         <div className="col-md-6">
           <div className="text-end">
-            <button className="btn btn-success">Add New Recipe</button>
+            <button onClick={showAddModal} className="btn btn-success">
+              Add New Recipe
+            </button>
           </div>
         </div>
 
