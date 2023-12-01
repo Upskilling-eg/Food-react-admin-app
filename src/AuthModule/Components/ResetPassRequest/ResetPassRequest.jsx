@@ -15,7 +15,7 @@ export default function ResetPassRequest() {
 
   const onSubmit = (data) => {
     axios
-      .post("http://upskilling-egypt.com:3002/api/v1/Users/Reset/Request", data)
+      .post("https://upskilling-egypt.com/api/v1/Users/Reset/Request", data)
       .then((response) => {
         navigate("/reset-pass");
 

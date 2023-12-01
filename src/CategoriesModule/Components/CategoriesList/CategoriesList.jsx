@@ -14,9 +14,10 @@ export default function CategoriesList() {
     setValue,
     formState: { errors },
   } = useForm();
+  const [pagesArray, setPagesArray] = useState([]);
   const onSubmit = (data) => {
     axios
-      .post("http://upskilling-egypt.com:3002/api/v1/Category/", data, {
+      .post("https://upskilling-egypt.com/api/v1/Category/", data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
@@ -42,6 +43,7 @@ export default function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [modalState, setModalState] = useState("close");
   const [itemId, setItemId] = useState(0);
+  const [searchString, setSearchString] = useState("");
 
   const showAddModal = () => {
     setValue("name", null);
@@ -62,7 +64,7 @@ export default function CategoriesList() {
   const handleClose = () => setModalState("close");
   const deleteCategory = () => {
     axios
-      .delete(`http://upskilling-egypt.com:3002/api/v1/Category/${itemId}`, {
+      .delete(`https://upskilling-egypt.com/api/v1/Category/${itemId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
@@ -86,7 +88,7 @@ export default function CategoriesList() {
 
   const updateCategory = (data) => {
     axios
-      .put(`http://upskilling-egypt.com:3002/api/v1/Category/${itemId}`, data, {
+      .put(`https://upskilling-egypt.com/api/v1/Category/${itemId}`, data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
@@ -107,25 +109,39 @@ export default function CategoriesList() {
       })
       .catch((error) => console.log(error));
   };
-  const getCategoriesList = () => {
+  const getCategoriesList = (pageNo, name) => {
     axios
-      .get(
-        "http://upskilling-egypt.com:3002/api/v1/Category/?pageSize=20&pageNumber=1",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-          },
-        }
-      )
+      .get("https://upskilling-egypt.com/api/v1/Category/", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+        params: {
+          pageSize: 5,
+          pageNumber: pageNo,
+          name: name,
+        },
+      })
       .then((response) => {
+        // [ 1,2 ,3 , , , , , ,100 ]
+        // Array(100).fill().map((_,shimaa)=>shimaa+1)
+        setPagesArray(
+          Array(response.data.totalNumberOfPages)
+            .fill()
+            .map((_, i) => i + 1)
+        );
         setCategoriesList(response.data.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  const getNameValue = (input) => {
+    setSearchString(input.target.value);
+    getCategoriesList(1, input.target.value);
+  };
   useEffect(() => {
-    getCategoriesList();
+    getCategoriesList(1);
   }, []);
 
   return (
@@ -219,34 +235,58 @@ export default function CategoriesList() {
         </div>
 
         <div>
+          <input
+            onChange={getNameValue}
+            placeholder="search by category name..."
+            className="form-control my-2"
+            type="text"
+          />
           {categoriesList.length > 0 ? (
-            <table className="table my-5">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Category Name</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categoriesList.map((category) => (
-                  <tr key={category.id}>
-                    <th scope="row">{category.id}</th>
-                    <td>{category.name}</td>
-                    <td>
-                      <i
-                        onClick={() => showUpdateModal(category)}
-                        className="fa fa-edit text-warning fa-2x mx-2"
-                      ></i>
-                      <i
-                        onClick={() => showDeleteModal(category.id)}
-                        className="fa fa-trash text-danger fa-2x"
-                      ></i>
-                    </td>
+            <div>
+                              <div className="table-responsive">
+
+              <table className="table  table-striped my-2">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {categoriesList.map((category, index) => (
+                    <tr key={category.id}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{category.name}</td>
+                      <td>
+                        <i
+                          onClick={() => showUpdateModal(category)}
+                          className="fa fa-edit text-warning mx-2"
+                        ></i>
+                        <i
+                          onClick={() => showDeleteModal(category.id)}
+                          className="fa fa-trash text-danger "
+                        ></i>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              </div>
+              <nav className="d-flex justify-content-center"  aria-label="...">
+                <ul className="pagination pagination-sm">
+                  {pagesArray.map((pageNo) => (
+                    <li
+                      key={pageNo}
+                      onClick={() => getCategoriesList(pageNo, searchString)}
+                      className="page-item"
+                    >
+                      <a className="page-link">{pageNo}</a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
           ) : (
             <NoData />
           )}

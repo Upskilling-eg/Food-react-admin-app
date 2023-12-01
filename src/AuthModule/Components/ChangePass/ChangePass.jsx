@@ -18,7 +18,7 @@ export default function ChangePass({ handleClose }) {
     console.log(data);
     axios
       .put(
-        "http://upskilling-egypt.com:3002/api/v1/Users/ChangePassword",
+        "https://upskilling-egypt.com/api/v1/Users/ChangePassword",
         data,
         {
           headers: {
