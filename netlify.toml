@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish="https://brilliant-sprinkles-9f522f.netlify.app/build"
+  base = "https://brilliant-sprinkles-9f522f.netlify.app/"
+
+  [[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
