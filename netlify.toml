@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
-  publish="https://brilliant-sprinkles-9f522f.netlify.app/build"
-  base = "https://brilliant-sprinkles-9f522f.netlify.app/"
+  publish="https://github.com/Upskilling-eg/Food-react-admin-app/build"
+  base = "https://github.com/Upskilling-eg/Food-react-admin-app"
 
   [[redirects]]
   from = "/*"
