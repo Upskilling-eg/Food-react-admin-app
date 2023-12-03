@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter, createHashRouter } from "react-router-dom";
 import "./App.css";
 import ChangePass from "./AuthModule/Components/ChangePass/ChangePass";
 import Login from "./AuthModule/Components/Login/Login";
@@ -29,7 +29,7 @@ function App() {
       saveAdminData();
     }
   }, []);
-  const routes = createBrowserRouter([
+  const routes = createHashRouter([
     {
       path: "dashboard",
       element: (
