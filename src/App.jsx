@@ -29,7 +29,7 @@ function App() {
       saveAdminData();
     }
   }, []);
-  const routes = createBrowserRouter([
+  const routes = createHashRouter([
     {
       path: "dashboard",
       element: (
